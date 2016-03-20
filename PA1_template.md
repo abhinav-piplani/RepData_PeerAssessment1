@@ -22,7 +22,7 @@ total_date <- aggregate(steps ~ date, data_project1, sum)
 fig_1<-barplot(total_date$steps, names.arg=total_date$date, xlab="Date", ylab="Sum of steps",)
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
+![plot of chunk unnamed-chunk-2](https://github.com/abhinav-piplani/RepData_PeerAssessment1/blob/master/unnamed-chunk-2-1.png)
 
 ```r
 mean(total_date$steps)
@@ -48,7 +48,7 @@ total_interval <- aggregate(steps ~ interval, data_project1, mean)
 fig_2<-plot(total_interval, type='l')
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
+![plot of chunk unnamed-chunk-3](https://github.com/abhinav-piplani/RepData_PeerAssessment1/blob/master/unnamed-chunk-3-1.png)
 
 ```r
 total_interval$interval[which.max(total_interval$steps)]
@@ -84,7 +84,7 @@ total_date_new <- aggregate(steps ~ date, modified_data, sum)
 fig_3<-barplot(total_date_new$steps, names.arg=total_date_new$date,xlab="Date", ylab="Sum of steps",)
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
+![plot of chunk unnamed-chunk-5](https://github.com/abhinav-piplani/RepData_PeerAssessment1/blob/master/unnamed-chunk-5-1.png)
 
 ```r
 mean(total_date_new$steps)
@@ -130,6 +130,6 @@ fig_4<-xyplot(steps ~ interval | days, data=x, layout=c(2,1), type='l')
 fig_4
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
+![plot of chunk unnamed-chunk-6](https://github.com/abhinav-piplani/RepData_PeerAssessment1/blob/master/unnamed-chunk-6-1.png)
 
 
