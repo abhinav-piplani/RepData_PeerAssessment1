@@ -1,25 +1,72 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
+title: "Project1"
+author: "Abhinav"
+date: "20 March 2016"
+output: html_document
 ---
 
+Downloading file from URL 
 
-## Loading and preprocessing the data
+```{r,echo=TRUE}
+download.file(url='https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip',dest="dataset_project1.zip",mode="wb")
+unzip ("dataset_project1.zip", exdir = ".")
+data_project1 <- read.csv("activity.csv",colClass=c('integer', 'Date', 'integer'))
+```
 
+Calculating mean and median of total number of steps taken per day and plotting the histogram.
 
+```{r,echo=TRUE}
+total_date <- aggregate(steps ~ date, data_project1, sum)
+fig_1<-barplot(total_date$steps, names.arg=total_date$date, xlab="Date", ylab="Sum of steps",)
+mean(total_date$steps)
+median(total_date$steps)
+```
 
-## What is mean total number of steps taken per day?
+Time Series Plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis), reporting the 5-minute interval which contains the maximum number of steps.
 
+```{r, echo=TRUE}
+total_interval <- aggregate(steps ~ interval, data_project1, mean)
+fig_2<-plot(total_interval, type='l')
+total_interval$interval[which.max(total_interval$steps)]
+```
 
+Reporting the total number of missing values in the dataset and imputing the missing values.
 
-## What is the average daily activity pattern?
+```{r, echo=TRUE}
+sum(is.na(data_project1$steps))
+modified_data <- merge(data_project1, total_date, by="date", suffixes=c("", ".median"))
+na_values <- is.na(modified_data$steps)
+modified_data$steps[na_values] <- modified_data$steps.median[na_values]
+modified_data <- modified_data[, c(1:3)]
+```
 
+Plotting the histogram of the total number of steps taken each day  reporting the mean and median total number of steps taken per day. 
+ 
+```{r, echo=TRUE}
+total_date_new <- aggregate(steps ~ date, modified_data, sum)
+fig_3<-barplot(total_date_new$steps, names.arg=total_date_new$date,xlab="Date", ylab="Sum of steps",)
+mean(total_date_new$steps)
+median(total_date_new$steps)
+```
 
+Constructing a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
-## Imputing missing values
+```{r, echo=TRUE}
+days <- function(dates) {
+  f <- function(date) {
+    if (weekdays(date) %in% c("Saturday", "Sunday")) { "weekend"}
+    else {"weekday"}}
+  sapply(dates, f)}
+data_project1$days <- as.factor(days(data_project1$date))
+str(data_project1)
+library(lattice)
+x<- aggregate(steps ~ interval + days, data_project1, mean)
+fig_4<-xyplot(steps ~ interval | days, data=x, layout=c(2,1), type='l')
+fig_4
+```
 
+library(knitr)
+setwd("C:/Users/Piplani/Desktop")
+knit2html("document.Rmd")
+browseURL("document.html")
 
-
-## Are there differences in activity patterns between weekdays and weekends?
